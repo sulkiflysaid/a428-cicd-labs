@@ -21,11 +21,13 @@ pipeline {
                 script {
                     def userInput = input(
                         message: 'Lanjutkan ke tahap Deploy?',
-                        ok: 'Proceed',
-                        submitter: 'user',
-                        parameters: [boolean(defaultValue: false, description: 'Pilih "Proceed" untuk melanjutkan atau "Abort" untuk menghentikan.', name: 'approval')]
+                        parameters: [choice(choices: ['Proses', 'Batal'], description: 'Pilih "Proses" untuk melanjutkan atau "Batal" untuk menghentikan.', name: 'approval')]
                     )
-                    env.approval = userInput
+                    if (userInput == 'Proses') {
+                        env.approval = true
+                    } else {
+                        env.approval = false
+                    }
                 }
             }
         }
@@ -42,4 +44,3 @@ pipeline {
             }
         }
     }
-}
