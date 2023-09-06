@@ -21,9 +21,9 @@ pipeline {
                 script {
                     def userInput = input(
                         message: 'Lanjutkan ke tahap Deploy?',
-                        parameters: [boolean(defaultValue: false, description: 'Lanjutkan ke tahap Deploy?', name: 'approval')]
+                        parameters: [booleanParam(defaultValue: false, description: 'Lanjutkan ke tahap Deploy?', name: 'approval')]
                     )
-                    env.approval = userInput.approval
+                    env.approval = userInput
                 }
             }
         }
