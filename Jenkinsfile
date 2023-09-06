@@ -21,26 +21,21 @@ pipeline {
                 script {
                     def userInput = input(
                         message: 'Lanjutkan ke tahap Deploy?',
-                        parameters: [choice(choices: ['Proses', 'Batal'], description: 'Pilih "Proses" untuk melanjutkan atau "Batal" untuk menghentikan.', name: 'approval')]
+                        parameters: [choice(name: 'ACTION', choices: 'Proceed\nAbort', description: '')]
                     )
-                    if (userInput == 'Proses') {
-                        env.approval = true
+                    
+                    if (userInput == 'Proceed') {
+                        echo 'Melanjutkan ke tahap Deploy'
                     } else {
-                        env.approval = false
+                        error('Pipeline dihentikan oleh pengguna')
                     }
                 }
             }
         }
-        stage('Deploy') {
-            when {
-                expression {
-                    // Tahap Deploy hanya dijalankan jika "approval" bernilai true
-                    return env.approval == true
-                }
-            }
+        stage('Deploy') { 
             steps {
-                sh './jenkins/scripts/deliver.sh'
-                sh './jenkins/scripts/kill.sh'
+                sh './jenkins/scripts/deliver.sh' 
+                sh './jenkins/scripts/kill.sh' 
             }
         }
     }
