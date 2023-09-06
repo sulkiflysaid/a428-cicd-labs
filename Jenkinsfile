@@ -18,14 +18,20 @@ pipeline {
         }
         stage('Manual Approval') {
             steps {
-        input(message: 'Lanjutkan ke tahap Deploy?', ok: 'Proceed', submitter: 'user', parameters: [boolean(defaultValue: false, description: 'Lanjutkan ke tahap Deploy?', name: 'approval')])
+                script {
+                    def userInput = input(
+                        message: 'Lanjutkan ke tahap Deploy?',
+                        parameters: [boolean(defaultValue: false, description: 'Lanjutkan ke tahap Deploy?', name: 'approval')]
+                    )
+                    env.approval = userInput.approval
+                }
             }
         }
         stage('Deploy') {
             when {
                 expression {
                     // Tahap Deploy hanya dijalankan jika "approval" bernilai true
-                    return params.approval == true
+                    return env.approval == true
                 }
             }
             steps {
